@@ -17,7 +17,8 @@ func main() {
 }
 
 func get() {
-
+	//https://stackoverflow.com/a/12122718/5719544
+	//disable SSL check - running local IBKR REST gateway
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	// customTransport := http.DefaultTransport.(*http.Transport).Clone()
 	// customTransport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
