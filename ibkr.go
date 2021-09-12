@@ -23,7 +23,7 @@ func main() {
 	fmt.Print("query=")
 	fmt.Printf("%+v\n", query) //https://pkg.go.dev/fmt
 
-	getConIDBySymbol("SWBI")
+	getConIDBySymbol("PM")
 	// marketData := getMarketData()
 	// fmt.Println("marketData.Bid=" + marketData[0].Bid)
 	// fmt.Println("marketData.Ask=" + marketData[0].Ask)
@@ -49,8 +49,8 @@ func getMarketData() MarketData {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	// Convert response body to string
-	bodyString := string(bodyBytes)
-	fmt.Println("API Response as String:\n" + bodyString)
+	// bodyString := string(bodyBytes)
+	// fmt.Println("API Response as String:\n" + bodyString)
 
 	// Convert response body to struct
 	var marketData MarketData
@@ -62,12 +62,8 @@ func getMarketData() MarketData {
 
 //POST REST call
 func getConIDBySymbol(symbol string) {
-	fmt.Println("2. Performing Http Post...")
-	//todo := Todo{1, 2, "lorem ipsum dolor sit amet", true}
 	symbol1 := Symbol{symbol}
-	//jsonReq, err := json.Marshal(todo)
 	jsonReq, err := json.Marshal(symbol1)
-	//resp, err := http.Post("https://jsonplaceholder.typicode.com/todos", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	resp, err := http.Post("https://localhost:5000/v1/api/iserver/secdef/search", "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
@@ -79,26 +75,15 @@ func getConIDBySymbol(symbol string) {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	// Convert response body to string
-	bodyString := string(bodyBytes)
-	fmt.Println(bodyString)
+	// bodyString := string(bodyBytes)
+	// fmt.Println(bodyString)
 
-	// Convert response body to Todo struct
-	//var todoStruct Todo
+	// Convert response body to struct
 	var searchBySymbol SearchBySymbol
-	//json.Unmarshal(bodyBytes, &todoStruct)
 	json.Unmarshal(bodyBytes, &searchBySymbol)
-	//fmt.Printf("%+v\n", todoStruct)
 	fmt.Printf("%+v\n", searchBySymbol)
 
 	fmt.Println("ConID=" + strconv.Itoa(searchBySymbol[0].Conid))
-}
-
-// Todo struct
-type Todo struct {
-	UserID    int    `json:"userId"`
-	ID        int    `json:"id"`
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
 }
 
 //Market Data Snapshot
