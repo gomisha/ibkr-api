@@ -18,12 +18,14 @@ type Query struct {
 }
 
 func main() {
-	query := Query{"FB", "380.0", "OCT21"}
+	query := Query{"MO", "380.0", "OCT21"}
 
 	fmt.Print("query=")
 	fmt.Printf("%+v\n", query) //https://pkg.go.dev/fmt
 
-	getConIDBySymbol("PM")
+	conID := getConIDBySymbol(query.symbol)
+	fmt.Println("conID=" + conID)
+
 	// marketData := getMarketData()
 	// fmt.Println("marketData.Bid=" + marketData[0].Bid)
 	// fmt.Println("marketData.Ask=" + marketData[0].Ask)
@@ -61,7 +63,7 @@ func getMarketData() MarketData {
 }
 
 //POST REST call
-func getConIDBySymbol(symbol string) {
+func getConIDBySymbol(symbol string) string {
 	symbol1 := Symbol{symbol}
 	jsonReq, err := json.Marshal(symbol1)
 
@@ -81,9 +83,9 @@ func getConIDBySymbol(symbol string) {
 	// Convert response body to struct
 	var searchBySymbol SearchBySymbol
 	json.Unmarshal(bodyBytes, &searchBySymbol)
-	fmt.Printf("%+v\n", searchBySymbol)
+	//fmt.Printf("%+v\n", searchBySymbol)
 
-	fmt.Println("ConID=" + strconv.Itoa(searchBySymbol[0].Conid))
+	return strconv.Itoa(searchBySymbol[0].Conid)
 }
 
 //Market Data Snapshot
